@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Project01.Middlewares;
 using Project01.Services;
 
 namespace Project01
@@ -37,6 +39,34 @@ namespace Project01
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<LoggingMiddleware>();
+            app.Use(async (context, next) =>
+            {
+                if (!context.Request.Headers.ContainsKey("IndexNumber"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("Index number is required!");
+                    return;
+                }
+
+                string index = context.Request.Headers["IndexNumber"].ToString();
+                if (string.IsNullOrEmpty(index))
+                {
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    await context.Response.WriteAsync("Please enter a valid user index number!");
+                    return;
+                }
+                else if (!index.Equals("s17712"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    await context.Response.WriteAsync("This user is not authorized!");
+                    return;
+                }
+
+                await next();
+
+            });
 
             app.UseHttpsRedirection();
 

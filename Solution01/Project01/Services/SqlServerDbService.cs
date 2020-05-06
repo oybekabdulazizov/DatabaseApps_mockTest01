@@ -5,6 +5,7 @@ using Project01.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace Project01.Services
 {
@@ -106,6 +107,27 @@ namespace Project01.Services
 
                     return animals;
                 }
+            }
+        }
+
+        public void SaveLogData(string path, string method, string queryString, string bodyString)
+        {
+            try
+            {
+                string logPath = @"log.txt";
+                using (StreamWriter writer = new StreamWriter(logPath))
+                {
+                    writer.WriteLine("Path: " + path);
+                    writer.WriteLine("Method: " + method);
+                    writer.WriteLine("QueryString: " + queryString);
+                    writer.WriteLine("Body: " + bodyString);
+                    writer.WriteLine("***************************");
+                    writer.Flush();
+                }
+            }
+            catch (IOException ex) 
+            {
+                throw new IOException();
             }
         }
     }
