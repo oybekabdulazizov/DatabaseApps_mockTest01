@@ -23,7 +23,7 @@ namespace Project01.Controllers
             _iService = iService;
         }
 
-        [HttpGet]
+        [HttpGet("add-animal")]
         public IActionResult GetAnimals(string orderBy = "AdmissionDate", string inOrder = "DESC")
         {
             try
