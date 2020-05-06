@@ -22,8 +22,10 @@ namespace Project01.Middlewares
         {
             if (context.Request != null)
             {
+                string requester = context.Request.Headers["index"].ToString();
                 string path = context.Request.Path;
                 string method = context.Request.Method;
+                var permissionGranted = (requester == "s17712");
                 string queryString = context.Request.QueryString.ToString();
                 string bodyString = context.Request.Body.ToString();
 
@@ -31,7 +33,7 @@ namespace Project01.Middlewares
                 {
                     bodyString = await reader.ReadToEndAsync();
                 }
-                service.SaveLogData(path, method, queryString, bodyString);
+                service.SaveLogData(requester, path, permissionGranted, method, queryString, bodyString);
             }
 
             await _next(context);

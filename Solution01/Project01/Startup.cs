@@ -43,14 +43,14 @@ namespace Project01
             app.UseMiddleware<LoggingMiddleware>();
             app.Use(async (context, next) =>
             {
-                if (!context.Request.Headers.ContainsKey("IndexNumber"))
+                if (!context.Request.Headers.ContainsKey("index"))
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await context.Response.WriteAsync("Index number is required!");
                     return;
                 }
 
-                string index = context.Request.Headers["IndexNumber"].ToString();
+                string index = context.Request.Headers["index"].ToString();
                 if (string.IsNullOrEmpty(index))
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;

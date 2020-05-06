@@ -1,0 +1,7 @@
+Requester: s17712
+Path: /api/animals
+PermissionGranted: True
+Method: GET
+QueryString: 
+Body: 
+***************************

@@ -110,14 +110,17 @@ namespace Project01.Services
             }
         }
 
-        public void SaveLogData(string path, string method, string queryString, string bodyString)
+        public void SaveLogData(string requester, string path, bool permissionGranted, 
+                                        string method, string queryString, string bodyString)
         {
             try
             {
                 string logPath = @"log.txt";
                 using (StreamWriter writer = new StreamWriter(logPath))
                 {
+                    writer.WriteLine("Requester: " + requester);
                     writer.WriteLine("Path: " + path);
+                    writer.WriteLine("PermissionGranted: " + permissionGranted);
                     writer.WriteLine("Method: " + method);
                     writer.WriteLine("QueryString: " + queryString);
                     writer.WriteLine("Body: " + bodyString);
